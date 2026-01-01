@@ -1,11 +1,10 @@
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Database {
 
     static HashMap<String,User> users = new HashMap<>();
     static HashMap<String, HashMap<String, Group>>groups = new HashMap<>() ;
-    static ArrayList<AdminUser> admins = new ArrayList<>();
+    static HashMap<String, AdminUser> admins = new HashMap<>();
 
 
     Database() {}
@@ -13,30 +12,31 @@ public class Database {
     //STORE USERS
     Database(User user) {
         Database.users.put(user.username, user);
-        System.out.println("Stored: "+user.username);
+        //System.out.println("Stored: "+user.username);
     }
 
     //STORE GROUPS
     Database(Group group) {
         
         if (isAdmin(group.admin.admin)) {
-            Database.groups.get(group.admin.admin.username).put(group.groupName, group);
+            Database
+            .groups.get(group.admin.admin.username).put(group.groupName, group);
         } else {
             Database.groups.put(group.admin.admin.username, new HashMap<>());
             Database.groups.get(group.admin.admin.username).put(group.groupName, group);
         }
 
-        System.out.println("Added new group: " + group.groupName + "\nOwed by: " + group.admin.admin.username);
+        //System.out.println("Added new group: " + group.groupName + "\nOwed by: " + group.admin.admin.username);
     }
     
     //STORE ADMINS
     Database(AdminUser admin) {
         if (Database.groups.get(admin.admin.username) == null) {
-            Database.admins.add(admin);
-            System.out.println("New admin: " + admin.admin.username);
+            Database.admins.put(admin.admin.username, admin);
+            //System.out.println("New admin: " + admin.admin.username);
         } else {
-            System.out.println("Is Already admin");
-        }
+            //System.out.println("Is Already admin");
+         }
     }
 
     
@@ -65,8 +65,8 @@ public class Database {
     }
 
     public void getAdminNames() {
-        for (AdminUser adminUser : Database.admins) {
-            System.out.println(adminUser.admin.username);
+        for (String adminUser : Database.admins.keySet()) {
+            System.out.println(adminUser);
         }
     }
 
@@ -99,12 +99,19 @@ public class Database {
     //CHECK FOR GROUPS OWNED BY SAID ADMIN    
     public void myGroups(User user) {
         if (isAdmin(user)) {
-            System.out.println("___" + user.username + " Groups___");
+            System.out.println("___" + user.username + "\'s Groups___");
             for (String g : Database.groups.get(user.username).keySet()) {
                 System.out.println("---> " + groups.get(user.username).get(g).groupName);
             }
         } else {
             System.out.println("Has no Groups");
+        }
+    }
+
+    public void myGroup(AdminUser user) {
+        System.out.println("___" + user.admin.username + " Groups___");
+        for (String g : Database.groups.get(user.admin.username).keySet()) {
+            System.out.println("---> " + groups.get(user.admin.username).get(g).groupName);
         }
     }
 
