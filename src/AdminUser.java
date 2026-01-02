@@ -17,8 +17,6 @@ public class AdminUser {
     }
     
     public void getAllMyGroup() {
-        Database database = new Database();
-        //database.myGroups(this.admin);
 
         for (String groupKey : Database.groups.get(this.admin.username).keySet()) {
 
